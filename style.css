@@ -1,0 +1,48 @@
+*{
+    background: rgb(0,0,0);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: rgb(135, 196, 207);
+}
+
+.margin--minor {
+    margin: 10px;
+}
+
+.input {
+    border: none;
+    border-radius: 1px;
+    color: rgb(151, 23, 130);
+    background-color: rgb(61, 75, 88);
+    
+}
+
+.input:focus {
+    outline: none;
+}
+
+.input--hide {
+    visibility: hidden;
+}
+
+label {
+    background: rgba(75, 5, 75, 0.541);
+    padding: 10px;
+}
+label:hover {
+    cursor: pointer;
+}
+
+ul {
+    padding-inline-start: 0;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+}
