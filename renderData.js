@@ -1,8 +1,9 @@
-export default function (dataHandler, htmlElement) {
+export default function (dataHandler, htmlElement, eventHandler) {
     htmlElement.innerHTML = ''
     dataHandler.getItems().forEach((row, rowIndex) => {
 
         const rowNode = document.createElement('tr')
+        rowNode.addEventListener('dblclick', eventHandler)
         htmlElement.appendChild(rowNode)
 
         row.forEach((tableItem, tableDataIndex) => {

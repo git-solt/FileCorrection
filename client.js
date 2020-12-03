@@ -68,7 +68,7 @@ function handleTableRowDoubleClick(e) {
 
     storage.removeIndex(this.rowIndex)
     console.log(storage.get(this.rowIndex))
-    renderData(storage, document.querySelector('table'))
+    renderData(storage, document.querySelector('table'), handleTableRowDoubleClick)
 }
 
 
