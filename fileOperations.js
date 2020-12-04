@@ -1,6 +1,7 @@
 import storage from './storage.js'
 import SEPARATOR from './separator.js'
 
+
 function readSourceAndCreateTable(separator, { done, value }, reader, eventHandler) {
     if (separator === SEPARATOR.SPACE) {
         readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, reader, eventHandler)
@@ -47,6 +48,26 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
             td.textContent = column
             tableRow.appendChild(td)
             tableRow.addEventListener('dblclick', eventHandler)
+            //TODO remove this eventlistener after testing
+            tableRow.addEventListener('mouseenter', function (e) {
+                if (e.target === this) {
+                    const p = document.createElement('span')
+                    p.id = this.rowIndex
+                    p.textContent = this.rowIndex + 1
+                    p.style.width = "10px"
+                    p.style.height = "5px"
+                    p.style.margin = "5px"
+                    this.style.position = "relative"
+                    p.style.position = 'absolute'
+                    
+                    
+                    p.style.left = 0
+
+                    this.appendChild(p)
+                    console.dir(this)
+
+                }
+            }, {once: true})
             table.appendChild(tableRow)
             item.push(column)
             storage.add(item)
@@ -72,6 +93,7 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
     main.appendChild(table)
 
     const exportBtn = document.createElement('button')
+    exportBtn.classList.add('button', 'button--export')
     exportBtn.textContent = 'Export table to file'
     exportBtn.addEventListener('click', mapDataForNewFile)
     main.appendChild(exportBtn)
@@ -420,7 +442,7 @@ function createFile(...data) {
     const byteBuffer = arrayOfArraysOfBytes.flat()
     const typedArrayForByteBuffer = new Int8Array(byteBuffer)
     const downloadableFile = new Blob([typedArrayForByteBuffer.buffer], { type: "text/plain" })
-    
+
     return URL.createObjectURL(downloadableFile)
 }
 

@@ -4,12 +4,9 @@ import storage from './storage.js'
 import renderData from './renderData.js'
 
 const upload = document.querySelector('#upload')
-const text = document.querySelector("#textinp")
 const main = document.querySelector('#main')
 
-text.addEventListener('input', (e) => {
-  renderData(storage, document.querySelector('table'))
-})
+
 
 upload.addEventListener('input', handleUpload)
 
