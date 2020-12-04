@@ -1,13 +1,10 @@
-*{
-    background: rgb(0,0,0);
-}
+
 
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    color: rgb(135, 196, 207);
 }
 
 .margin--minor {
@@ -17,8 +14,7 @@
 .input {
     border: none;
     border-radius: 1px;
-    color: rgb(151, 23, 130);
-    background-color: rgb(61, 75, 88);
+
     
 }
 
@@ -31,7 +27,6 @@
 }
 
 label {
-    background: rgba(75, 5, 75, 0.541);
     padding: 10px;
 }
 label:hover {

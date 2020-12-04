@@ -1,6 +1,5 @@
 import storage from './storage.js'
 import SEPARATOR from './separator.js'
-import renderData from './renderData.js'
 
 function readSourceAndCreateTable(separator, { done, value }, reader, eventHandler) {
     if (separator === SEPARATOR.SPACE) {
@@ -76,7 +75,6 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
     exportBtn.textContent = 'Export table to file'
     exportBtn.addEventListener('click', mapDataForNewFile)
     main.appendChild(exportBtn)
-
 
 }
 
@@ -193,14 +191,11 @@ function readBytesAndCreateTableFromFileDataTabSeparated({ done, value }, reader
 
 function mapDataForNewFile() {
 
-
     let firstRow = storage.getItems().filter(row => row[0] === "01")
     let rowRecordType40 = storage.getItems().filter(row => row[0] === "40")
     let rowRecordType60 = storage.getItems().filter(row => row[0] === "60")
     let lastRow = storage.getItems().filter(row => row[0] === "99")
     let totalLength
-
-
 
     firstRow = firstRow.map((firstRow) => {
         return firstRow.map((column, index) => {
@@ -225,13 +220,10 @@ function mapDataForNewFile() {
             }
             let numberOfWhiteSpaceNeeded = totalLength - column.length
             for (let i = 0; i < numberOfWhiteSpaceNeeded; i++) {
-
                 column += " "
-
-
             }
             const endOfLine = index === 5
-            if(endOfLine) {
+            if (endOfLine) {
                 column += "\n"
             }
 
@@ -283,7 +275,6 @@ function mapDataForNewFile() {
             for (let i = 0; i < numberOfWhiteSpaceNeeded; i++) {
                 const endOfLine = index === 8 && i === numberOfWhiteSpaceNeeded - 1
 
-
                 if (revertConcatination) {
                     column = " ".concat(column)
                     if (i === numberOfWhiteSpaceNeeded - 1 && (index === 6 || index === 1 || index === 3 || index === 7)) {
@@ -302,8 +293,6 @@ function mapDataForNewFile() {
 
         })
     })
-
-
 
     rowRecordType60 = rowRecordType60.map((row) => {
         return row.map((column, index) => {
@@ -334,11 +323,11 @@ function mapDataForNewFile() {
                     totalLength = 150
                     revertConcatination = true
                     break;
-
             }
-            let numberOfWhiteSpaceNeeded = totalLength - column.length
+
+            const numberOfWhiteSpaceNeeded = totalLength - column.length
             for (let i = 0; i < numberOfWhiteSpaceNeeded; i++) {
-            const endOfLine = index === 6 && i === numberOfWhiteSpaceNeeded - 1
+                const endOfLine = index === 6 && i === numberOfWhiteSpaceNeeded - 1
 
                 if (revertConcatination) {
                     column = " ".concat(column)
@@ -349,7 +338,7 @@ function mapDataForNewFile() {
                     }
                 }
                 else column += " "
-                if(endOfLine) {
+                if (endOfLine) {
                     column += "\n"
                 }
             }
@@ -358,7 +347,6 @@ function mapDataForNewFile() {
 
         })
     })
-
 
     lastRow = lastRow.map((lastrow) => {
         return lastrow.map((column, index) => {
@@ -389,6 +377,11 @@ function mapDataForNewFile() {
 
                 if (revertConcatination) {
                     column = " ".concat(column)
+
+                    if (index === 2 && i === totalNumberOfWhiteSpaceNeeded - 1) {
+                        column += " "
+                    }
+
                 } else column += " "
 
                 if (endOfLine) {
@@ -400,36 +393,7 @@ function mapDataForNewFile() {
         })
     })
 
-
-
-
-    let data = []
-    data = data.concat(firstRow, rowRecordType40, rowRecordType60, lastRow)
-    console.log(data)
-
-    const arrayOfArraysOfBytes = data.map((row)=> {
-        return row.map((column)=> {
-            return column.split('')
-                        .map(char => char.charCodeAt())
-        })
-
-    }).flat()
-    
-
-    const bytesBuffer = arrayOfArraysOfBytes.flat()
-    // bytesBuffer.forEach(cur => {
-    //     let char = String.fromCharCode(cur)
-    //     let visibleSpace = char === " " ? "*" : char
-    //     consoleString+= visibleSpace
-    // })
-
-
-    // console.log(consoleString)
-
-    const typedArrayForByteBuffer = new Int8Array(bytesBuffer)
-
-    const downloadableFile = new Blob([typedArrayForByteBuffer.buffer], {type: "text/plain"})
-    const url = URL.createObjectURL(downloadableFile)
+    const url = createFile(firstRow, rowRecordType40, rowRecordType60, lastRow)
 
     // const a = document.createElement('a')
     // a.href = url
@@ -441,6 +405,23 @@ function mapDataForNewFile() {
 
     window.open(url, '_blank')
 
+}
+
+function createFile(...data) {
+    data = data.flat()
+    const arrayOfArraysOfBytes = data.map((row) => {
+        return row.map((column) => {
+            return column.split('')
+                .map(char => char.charCodeAt())
+        })
+
+    }).flat()
+
+    const byteBuffer = arrayOfArraysOfBytes.flat()
+    const typedArrayForByteBuffer = new Int8Array(byteBuffer)
+    const downloadableFile = new Blob([typedArrayForByteBuffer.buffer], { type: "text/plain" })
+    
+    return URL.createObjectURL(downloadableFile)
 }
 
 

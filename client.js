@@ -1,8 +1,7 @@
 import separator from './separator.js'
-import readSourceAndCreateTable from './readBytesAndCreateTableFromFileData.js'
+import readSourceAndCreateTable from './fileOperations.js'
 import storage from './storage.js'
 import renderData from './renderData.js'
-console.log(storage.getItems())
 
 const upload = document.querySelector('#upload')
 const text = document.querySelector("#textinp")
@@ -12,14 +11,12 @@ text.addEventListener('input', (e) => {
   renderData(storage, document.querySelector('table'))
 })
 
-
 upload.addEventListener('input', handleUpload)
 
 async function uploadToSpringBackend(e) {
     const file = e.target.files[0]
     const formdata = new FormData()
     formdata.append('file', file)
-
 
     try {
         const result = await fetch('http://localhost:8080/upload', {
@@ -36,10 +33,7 @@ async function uploadToSpringBackend(e) {
         console.log(e)
     }
 
-
-
 }
-
 
 function handleUpload(e) {
     const file = e.target.files[0]
@@ -62,14 +56,13 @@ function handleUpload(e) {
 }
 
 function handleTableRowDoubleClick(e) {
-    console.dir(this)
-    const storageEntry = storage.get(this.rowIndex)
-    console.log(storage.get(this.rowIndex))
-
     storage.removeIndex(this.rowIndex)
-    console.log(storage.get(this.rowIndex))
+    storage.notifyDataChange()
     renderData(storage, document.querySelector('table'), handleTableRowDoubleClick)
 }
+
+
+
 
 
 

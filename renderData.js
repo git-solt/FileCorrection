@@ -1,20 +1,17 @@
 export default function (dataHandler, htmlElement, eventHandler) {
     htmlElement.innerHTML = ''
-    dataHandler.getItems().forEach((row, rowIndex) => {
+    console.log(dataHandler.getItems())
+    dataHandler.getItems().forEach((row) => {
 
         const rowNode = document.createElement('tr')
         rowNode.addEventListener('dblclick', eventHandler)
         htmlElement.appendChild(rowNode)
 
-        row.forEach((tableItem, tableDataIndex) => {
+        row.forEach((tableItem) => {
 
             const tableDataNode = document.createElement('td')
-            const isTotalColumn = rowIndex === dataHandler.getItems().length - 1 && tableDataIndex === 2
 
-            const tableDataValue = isTotalColumn ? dataHandler.getTotalAmount()  : tableItem
-
-
-            tableDataNode.textContent = tableDataValue
+            tableDataNode.textContent = tableItem
             rowNode.appendChild(tableDataNode)
         })
     })
