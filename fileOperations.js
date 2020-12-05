@@ -1,5 +1,6 @@
 import storage from './storage.js'
 import SEPARATOR from './separator.js'
+import renderData from './renderData.js'
 
 
 function readSourceAndCreateTable(separator, { done, value }, reader, eventHandler) {
@@ -13,9 +14,13 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
     if (done) {
         reader.cancel()
     }
+
+    const tableWrapper = document.createElement('div')
+    tableWrapper.id = "tableWrapper"
+    tableWrapper.classList.add("tablewrapper")
     const table = document.createElement('table')
+    tableWrapper.appendChild(table)
     let column = ""
-    let tableRow = document.createElement('tr')
     let separated = false
     let item = []
 
@@ -26,14 +31,9 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
             separated = true
             const td = document.createElement('td')
             console.log(column)
-            // debugger
+            // debugger          
+            item.push(column)
 
-            td.textContent = column
-            if (tableRow) {
-                item.push(column)
-                tableRow.appendChild(td)
-
-            }
             column = ""
             continue
 
@@ -44,37 +44,11 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
 
         if (char === "\n") {
 
-            const td = document.createElement('td')
-            td.textContent = column
-            tableRow.appendChild(td)
-            tableRow.addEventListener('dblclick', eventHandler)
-            //TODO remove this eventlistener after testing
-            tableRow.addEventListener('mouseenter', function (e) {
-                if (e.target === this) {
-                    const p = document.createElement('span')
-                    p.id = this.rowIndex
-                    p.textContent = this.rowIndex + 1
-                    p.style.width = "10px"
-                    p.style.height = "5px"
-                    p.style.margin = "5px"
-                    this.style.position = "relative"
-                    p.style.position = 'absolute'
-                    
-                    
-                    p.style.left = 0
-
-                    this.appendChild(p)
-                    console.dir(this)
-
-                }
-            }, {once: true})
-            table.appendChild(tableRow)
             item.push(column)
             storage.add(item)
             item = []
 
             column = ""
-            tableRow = document.createElement('tr')
             // debugger
             continue
         }
@@ -85,15 +59,10 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
 
     }
 
-    //Last row and tabledata column appended here cause no new line for creating it.
-    const td = document.createElement('td')
-    td.textContent = column
-    tableRow.appendChild(td)
-    table.appendChild(tableRow)
-    main.appendChild(table)
-
+    main.appendChild(tableWrapper)
+    renderData(storage, table, eventHandler)
     const exportBtn = document.createElement('button')
-    exportBtn.classList.add('button', 'button--export')
+    exportBtn.classList.add('button', 'button--export', 'margin--minor')
     exportBtn.textContent = 'Export table to file'
     exportBtn.addEventListener('click', mapDataForNewFile)
     main.appendChild(exportBtn)

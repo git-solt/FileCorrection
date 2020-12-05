@@ -48,7 +48,10 @@ body {
     color: var(--icyblue);
     border-radius: 5px;
     box-shadow: 8px 5px 5px var(--marine);
+    transition: all .1s ease;
 }
+
+
 .button:hover {
     cursor: pointer;
     padding: 12px;
@@ -92,4 +95,5 @@ td {
     padding: 5px
 
 }
+
 
