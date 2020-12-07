@@ -1,6 +1,7 @@
 import storage from './storage.js'
 import SEPARATOR from './separator.js'
 import renderData from './renderData.js'
+import {sendDataAndDecideLineNumberDisplay} from './uiutils.js'
 
 
 function readSourceAndCreateTable(separator, { done, value }, reader, eventHandler) {
@@ -29,8 +30,6 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
 
         if (char === " " && !separated) {
             separated = true
-            const td = document.createElement('td')
-            console.log(column)
             // debugger          
             item.push(column)
 
@@ -60,7 +59,10 @@ function readBytesAndCreateTableFromFileDataSpaceSeparated({ done, value }, read
     }
 
     main.appendChild(tableWrapper)
-    renderData(storage, table, eventHandler)
+    const buttonPanel = document.querySelector('#buttonpanel')
+    buttonPanel.style.width = "100%"
+    tableWrapper.insertBefore(buttonPanel, tableWrapper.firstElementChild)
+    renderData(storage, sendDataAndDecideLineNumberDisplay(table), eventHandler)
     const exportBtn = document.createElement('button')
     exportBtn.classList.add('button', 'button--export', 'margin--minor')
     exportBtn.textContent = 'Export table to file'
@@ -466,4 +468,52 @@ function parseTableAndWriteDownloadableFile(e) {
     }
 }
 
-export default readSourceAndCreateTable
+
+function parseLogFileAndExtractData(file, cb) {
+    const reader = new FileReader()
+
+    reader.readAsArrayBuffer(file)
+
+    reader.onload = () => {
+        const bytebuffer = reader.result
+        const bytes = new Int8Array(bytebuffer)
+        let lineNumber = ""
+        let errMsg = ""
+        for (const byte of bytes) {
+            const char = String.fromCharCode(byte)
+            const isReferanceToLineNumber = !isNaN(parseInt(char))
+            if (isReferanceToLineNumber && errMsg.includes("line")) {
+                lineNumber += char
+            }
+            errMsg += char
+            if (char === "\n") {
+                lineNumber = parseInt(lineNumber)
+                const errorItem = storage.get(lineNumber - 1)
+                const id = errorItem[1]
+                const errorInstance = {
+                    lineNumber,
+                    errMsg,
+                    id
+                }
+                storage.addErrorInstance(errorInstance)
+                lineNumber = ""
+                errMsg = ""
+            }
+        }
+        if (errMsg.length > 0) {
+            console.log("OK")
+
+        }
+        console.log(storage.getErrorInstances())
+        cb() 
+    }
+
+    reader.onerror = (e) => {
+        cb(e)
+    }
+
+    
+}
+
+
+export {parseLogFileAndExtractData, readSourceAndCreateTable as default}

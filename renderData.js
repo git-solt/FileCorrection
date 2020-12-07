@@ -1,48 +1,87 @@
 export default function (dataHandler, htmlElement, eventHandler) {
-    htmlElement.innerHTML = ''
+    const shouldRenderAllLineNumbers = htmlElement.hasOwnProperty("withAll")
+    const table = shouldRenderAllLineNumbers ? htmlElement.withAll : htmlElement
+    const errorPanel = document.querySelector('#errorpanel')
+    errorPanel.firstElementChild.innerHTML = ""
+
+    table.innerHTML = ''
     console.log(dataHandler.getItems())
     dataHandler.getItems().forEach((row) => {
-        htmlElement.parentElement.style.position = 'relative'
+        table.parentElement.style.position = 'relative'
         const rowNode = document.createElement('tr')
         rowNode.addEventListener('dblclick', eventHandler)
-        
+        const lineNumber = createBasicLineNumber()
 
-        if(htmlElement.hasOwnProperty('withAll')) {
-            rowNode.appendChild()
+        if (dataHandler.isErrorItem(row)) {
+            rowNode.classList.add("erroritem")
+            console.log("fine")
         }
 
-        rowNode.addEventListener('mouseenter', function(e) {
-            if (e.target === this) {
-                const p = document.createElement('p')
-                p.id = this.rowIndex
-                p.textContent = this.rowIndex + 1
-                p.style.width = "10px"
-                p.style.height = "5px"
-                p.style.margin = "5px"
-                p.style.position = 'absolute'
-                p.className = "linenumber"
-                
-                
-                p.style.left = "-25px"
-
-                this.appendChild(p)
-                console.dir(this)}
-        })
-
-        rowNode.addEventListener('mouseleave', function(e){
-            if(e.target === this) {
-                this.lastChild.remove()
-            }
-        })
-       
-        htmlElement.appendChild(rowNode)
+        table.appendChild(rowNode)
 
         row.forEach((tableItem) => {
 
             const tableDataNode = document.createElement('td')
 
             tableDataNode.textContent = tableItem
+
             rowNode.appendChild(tableDataNode)
         })
+        if (shouldRenderAllLineNumbers) {
+            lineNumber.textContent = rowNode.rowIndex + 1
+            rowNode.appendChild(lineNumber)
+        } else {
+            rowNode.addEventListener('mouseenter', function (e) {
+                if (e.target === this) {
+                    lineNumber.textContent = this.rowIndex + 1
+                    this.appendChild(lineNumber)
+                }
+            })
+            rowNode.addEventListener('mouseleave', function (e) {
+                if (e.target === this) {
+                    this.lastChild.remove()
+                }
+            })
+        }
     })
+
+    
+    createErrorlist(dataHandler.getErrorInstances(), errorPanel.firstElementChild)
+
+}
+
+function createBasicLineNumber() {
+    const p = document.createElement('p')
+    p.style.width = "10px"
+    p.style.height = "5px"
+    p.style.margin = "5px"
+    p.style.position = 'absolute'
+    p.className = "linenumber"
+    p.style.left = "-25px"
+    return p
+}
+
+
+function createErrorlist(errors, list) {
+    list.style.padding = "0px"
+    if (errors.length > 0) {
+        let li = document.createElement('li')
+        li.textContent = 'Error log'
+        list.style.padding = "5px"
+
+        list.appendChild(li)
+        errors.forEach((e) => {
+            //Replace original linenumberInfo with the updated one
+            const errorDisplayMessage = e.errMsg.split(' ').map((errorpart, index) => {
+                if (index > 1 && !isNaN(parseInt(errorpart))) {
+                    return e.lineNumber
+                }
+                return errorpart
+            }).join(' ')
+            li = document.createElement('li')
+            li.textContent = errorDisplayMessage
+            list.appendChild(li)
+            console.log(errorDisplayMessage)
+        })
+    }
 }

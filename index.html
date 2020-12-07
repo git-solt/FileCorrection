@@ -7,12 +7,16 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class="container" id="main">
+    <div class="container position--relative" id="main">
         <h1>Handle file error</h1>
         <p id="content" class="margin--minor"></p>
-        <label class="button margin--minor" for="upload">Upload file</label>  
-        <input class="margin--minor input--hide" id="upload" type="file">
-        <div id="tablewrapper" class="tablewrapper"></div>
+        <div class="container container--row position--relative" id="buttonpanel">
+            <label id="uploadLabel" class="button margin--minor" for="upload">Upload file</label>  
+            <input class="margin--minor input--hide" id="upload" type="file">
+        </div>
+        <div class="errorpanel" id="errorpanel">
+            <ol id="errorlist" class="errorlist"></ol>
+        </div>
     </div>
     <script src="client.js" type="module"></script>
 </body>
