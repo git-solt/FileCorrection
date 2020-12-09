@@ -7,6 +7,7 @@
     --easyerrormark: #3d1b2f;
     --offgrey: #53686a;
     --brighterror: #ff42b1;
+    --successbright: #ada982;
   }
 
 * {
@@ -41,12 +42,20 @@ h1 {
     width: 50%;
 }
 
+.container--flex-end {
+    justify-content: flex-end;
+}
+
 .position--relative {
     position: relative;
 }
 
 .margin--minor {
     margin: 10px;
+}
+
+.margin--tiny-left {
+    margin-left: 3px
 }
 
 .input {
@@ -72,6 +81,36 @@ h1 {
     box-shadow: 8px 5px 5px var(--marine);
     transition: all .1s ease;
     border:none;
+    transition: color 2s ease;
+    transition: opacity 3s ease;
+
+    
+}
+
+.button--hide {
+    opacity: 0;
+    
+}
+
+.button--hide:hover {
+    cursor: default;
+}
+.text-success {
+    color:var(--offgrey);
+
+}
+
+.text-success::after {
+    content:"";
+    display:inline-block;
+    width: 15px;
+    height: 20px;
+    border: solid var(--successbright);
+    border-width: 0px 3px 3px 0px;
+    transform: rotate(45deg);
+    margin-left: 10px;
+    margin-bottom: 2px;
+
 }
 
 .button--small {
@@ -88,6 +127,8 @@ h1 {
 }
 
 
+
+
 .button:hover {
     cursor: pointer;
     padding: 12px;
@@ -97,7 +138,8 @@ h1 {
 
 .button--small:hover {
     cursor: pointer;
-    padding: 6px
+    padding: 6px;
+    margin-bottom: 0px;
 }
 
 ul {
@@ -119,8 +161,8 @@ table  {
 
 tr {
     margin: 0;
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    /* display: grid;
+    grid-template-columns: repeat(8, 1fr); */
     
 }
 
@@ -172,3 +214,23 @@ td {
     padding: 5px;
 }
 
+.width--minor {
+    width: 25%
+}
+
+input[type=checkbox]:checked + label {
+    background: var(--offgrey)
+}
+
+.text-card {
+    text-align: center;
+    color: var(--marine);
+    text-shadow: 1px 1px #3d1b32;
+    letter-spacing: .5rem;
+    padding: 20px;
+    width: 90%;
+    box-shadow: 1px 7px 10px var( --marine);
+    border-radius: 5px;
+    margin-top: 10px;
+    font-family: Tahoma;
+}

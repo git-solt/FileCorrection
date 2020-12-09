@@ -6,7 +6,7 @@ export default function (dataHandler, htmlElement, eventHandler) {
 
     table.innerHTML = ''
     console.log(dataHandler.getItems())
-    dataHandler.getItems().forEach((row) => {
+    dataHandler.getItems().forEach((row, index) => {
         table.parentElement.style.position = 'relative'
         const rowNode = document.createElement('tr')
         rowNode.addEventListener('dblclick', eventHandler)
@@ -19,14 +19,30 @@ export default function (dataHandler, htmlElement, eventHandler) {
 
         table.appendChild(rowNode)
 
-        row.forEach((tableItem) => {
-
+        row.forEach((tableItem, columnIndex) => {
+            const isLastRow = index === dataHandler.getItems().length -1
+            const isTotalSumColumn = isLastRow && columnIndex === 2
             const tableDataNode = document.createElement('td')
 
-            tableDataNode.textContent = tableItem
+            tableDataNode.textContent =  isTotalSumColumn ?  parseFloat(tableItem).toFixed(2) : tableItem
 
             rowNode.appendChild(tableDataNode)
+            const isRecordType60AndNeedColumnFill = columnIndex === 6 && row[0] == 60
+            const isLastRowAndNeedsColumnFill = isLastRow && columnIndex === row.length - 1
+
+            //Unoptimal Hack: Filling row to make it expand accross the entire table
+            if(isRecordType60AndNeedColumnFill) {
+                tableDataNode.colSpan = "2"
+            }
+            if (isLastRowAndNeedsColumnFill) {
+                const fillTd = document.createElement('td')
+                fillTd.colSpan = "2"
+                rowNode.appendChild(fillTd)
+            }
+            //
+
         })
+
         if (shouldRenderAllLineNumbers) {
             lineNumber.textContent = rowNode.rowIndex + 1
             rowNode.appendChild(lineNumber)
@@ -45,8 +61,9 @@ export default function (dataHandler, htmlElement, eventHandler) {
         }
     })
 
-    
+
     createErrorlist(dataHandler.getErrorInstances(), errorPanel.firstElementChild)
+    dataHandler.renderDone()
 
 }
 

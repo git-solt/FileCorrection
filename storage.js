@@ -1,10 +1,16 @@
 const items = []
+let filteredItems = []
+let filtering = false
 const errorInstances = []
 
 export default Object.freeze({
     getItems() {
-        return items
+        if(filtering && filteredItems.length > 0) {
+            return filteredItems
+        }
+        return [...items]
     },
+
     add(item) {
         items.push(item)
     },
@@ -57,7 +63,7 @@ export default Object.freeze({
         }
     },
     isErrorItem(item) {
-        return errorInstances.some((errorInstance)=> {
+        return errorInstances.some((errorInstance) => {
             return errorInstance.id === item[1]
         })
     },
@@ -67,14 +73,28 @@ export default Object.freeze({
     },
 
     notifyLineNumberRemoved(lineNumber) {
-        errorInstances = errorInstances.map((curErr)=> {
-            if(curErr.lineNumber > lineNumber) {
+        errorInstances = errorInstances.map((curErr) => {
+            if (curErr.lineNumber > lineNumber) {
                 curErr.lineNumber -= 1
                 return curErr
             }
             return curErr
         })
+    },
+
+    notifyFilteringAndSetFilterData(data) {
+        if (!filtering) {
+            filtering = true
+            filteredItems = data
+        }
+    },
+
+    renderDone() {
+        filtering = false
+        filteredItems = []
     }
+
+
 
 
 })
