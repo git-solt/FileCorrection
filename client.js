@@ -38,22 +38,24 @@ function handleUpload(e) {
 
         //Adding a new eventlistener for handeling log file
         function handleUploadErrorLog(e) {
-            console.log("running")
             const file = e.target.files[0]
             parseLogFileAndExtractData(file, (e) => {
                 if (e) {
                     content.textContent = "Error parsing data"
                 } else {
                     if (storage.getErrorInstances().length > 0) {
-                        renderData(storage, sendDataAndDecideLineNumberDisplay(document.querySelector('table')), handleTableRowDoubleClick)
+
+                        renderData(manipulateData(storage), sendDataAndDecideLineNumberDisplay(document.querySelector('table')), handleTableRowDoubleClick)
                         uploadLabel.classList.add("button--hide", "text-success")
                         uploadLabel.textContent = "Log Added"
-                        
-                        setTimeout(()=> {
-                           uploadLabel.style.visibility = "hidden" 
-                        },3500)
+
+                        setTimeout(() => {
+                            uploadLabel.style.visibility = "hidden"
+                        }, 4500)
                         this.removeEventListener('input', handleUploadErrorLog)
-                    } else console.log("not correct log")
+                    } else {
+                        content.textContent = "Could not find error entries. Please check the file"
+                    }
                 }
             })
         }
@@ -125,7 +127,7 @@ function invokeFilterPanel() {
     buttonPanel.appendChild(container)
 
 
-    
+
 }
 
 function invokeSortingButton() {
@@ -137,8 +139,8 @@ function invokeSortingButton() {
 }
 
 function handleTableSorting(e) {
-    if(e.target === this) {
-        if(getFilter().orderBy === "sum") {
+    if (e.target === this) {
+        if (getFilter().orderBy === "sum") {
             clearSorting()
         } else setFilterSortBySum()
     }
