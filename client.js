@@ -143,7 +143,7 @@ function handleTableSorting(e) {
         } else setFilterSortBySum()
     }
 
-    renderData(manipulateData(storage), sendDataAndDecideLineNumberDisplay(document.querySelector('table'), handleTableRowDoubleClick))
+    renderData(manipulateData(storage), sendDataAndDecideLineNumberDisplay(document.querySelector('table')), handleTableRowDoubleClick)
 }
 
 function createBasicSortingButton(id = "sortingbtn") {
