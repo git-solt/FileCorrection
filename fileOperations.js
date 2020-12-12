@@ -1,7 +1,7 @@
 import storage from './storage.js'
 import SEPARATOR from './separator.js'
 import renderData from './renderData.js'
-import {sendDataAndDecideLineNumberDisplay} from './uiutils.js'
+import { sendDataAndDecideLineNumberDisplay } from './uiutils.js'
 
 
 function readSourceAndCreateTable(separator, { done, value }, reader, eventHandler) {
@@ -202,10 +202,10 @@ function mapDataForNewFile() {
                     totalLength = 10
                     break;
                 case 3:
-                    totalLength = 30
+                    totalLength = 31
                     break;
                 case 4:
-                    totalLength = 20
+                    totalLength = 21
                     break;
                 case 5:
                     totalLength = 8
@@ -251,15 +251,15 @@ function mapDataForNewFile() {
                     totalLength = 9
                     break;
                 case 6:
-                    totalLength = 21
+                    totalLength = 22
                     revertConcatination = true
                     break;
                 case 7:
-                    totalLength = 25
+                    totalLength = 26
                     revertConcatination = true
                     break;
                 case 8:
-                    totalLength = 150
+                    totalLength = 151
                     revertConcatination = true
                     break;
 
@@ -267,16 +267,15 @@ function mapDataForNewFile() {
             let numberOfWhiteSpaceNeeded = totalLength - column.length
             for (let i = 0; i < numberOfWhiteSpaceNeeded; i++) {
                 const endOfLine = index === 8 && i === numberOfWhiteSpaceNeeded - 1
-
                 if (revertConcatination) {
-                    column = " ".concat(column)
                     if (i === numberOfWhiteSpaceNeeded - 1 && (index === 6 || index === 1 || index === 3 || index === 7)) {
                         //Append whitespace at the end of column
                         column += " "
-                    }
+
+                    } else column = " ".concat(column)
+
                 }
                 else column += " "
-
                 if (endOfLine) {
                     column += "\n"
                 }
@@ -313,7 +312,7 @@ function mapDataForNewFile() {
                     totalLength = 3
                     break
                 case 6:
-                    totalLength = 150
+                    totalLength = 151
                     revertConcatination = true
                     break;
             }
@@ -323,12 +322,11 @@ function mapDataForNewFile() {
                 const endOfLine = index === 6 && i === numberOfWhiteSpaceNeeded - 1
 
                 if (revertConcatination) {
-                    column = " ".concat(column)
 
-                    if (i === numberOfWhiteSpaceNeeded - 1 && (index === 4 || index === 1)) {
+                if (i === numberOfWhiteSpaceNeeded - 1 && (index === 4 || index === 1)) {
                         //append one white space at the end of column
                         column += " "
-                    }
+                    } else column = " ".concat(column)
                 }
                 else column += " "
                 if (endOfLine) {
@@ -352,7 +350,7 @@ function mapDataForNewFile() {
                     totalLength = 12
                     break;
                 case 2:
-                    totalLength = 20
+                    totalLength = 21
                     revertConcatination = true
                     break;
                 case 3:
@@ -388,15 +386,15 @@ function mapDataForNewFile() {
 
     const url = createFile(firstRow, rowRecordType40, rowRecordType60, lastRow)
 
-    // const a = document.createElement('a')
-    // a.href = url
-    // a.download = "08collectdownload.txt"
-    // a.textContent = "Click for download"
-    // a.style.color = "white"
-    // document.body.appendChild(a)
-    // a.click()
+    const a = document.createElement('a')
+    a.href = url
+    a.download = "08collectdownload.txt"
+    a.textContent = "Click for download"
+    a.style.color = "white"
+    document.body.appendChild(a)
+    a.click()
 
-    window.open(url, '_blank')
+    // window.open(url, '_blank')
 
 }
 
@@ -505,15 +503,15 @@ function parseLogFileAndExtractData(file, cb) {
 
         }
         console.log(storage.getErrorInstances())
-        cb() 
+        cb()
     }
 
     reader.onerror = (e) => {
         cb(e)
     }
 
-    
+
 }
 
 
-export {parseLogFileAndExtractData, readSourceAndCreateTable as default}
+export { parseLogFileAndExtractData, readSourceAndCreateTable as default }
