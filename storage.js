@@ -42,10 +42,16 @@ export default Object.freeze({
         const nO60 = this.getRecordType60Total()
         const nO40 = this.getRecordType40Total()
         const lastRow = items.length - 1
-
-        items[lastRow][2] = total.toString()
-        items[lastRow][3] = nO40 < 10 ? "0".concat(nO40.toString()) : nO40.toString()
-        items[lastRow][5] = nO60 < 10 ? "0".concat(nO60.toString()) : nO60.toString()
+        function appendRightAmountOfZerosToTotalTypeColumns(totalOfGivenType) {
+           const numberOfZerosToAppend = 6 - totalOfGivenType.length
+           for(let i = 0; i < numberOfZerosToAppend; i++) {
+            totalOfGivenType = "0".concat(totalOfGivenType)
+           }
+           return totalOfGivenType
+        }
+        items[lastRow][2] = total.toFixed(2)
+        items[lastRow][3] = appendRightAmountOfZerosToTotalTypeColumns(nO40.toString())
+        items[lastRow][5] = appendRightAmountOfZerosToTotalTypeColumns(nO60.toString())
     },
 
     addErrorInstance(error) {

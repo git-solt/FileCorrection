@@ -65,9 +65,14 @@ function handleUpload(e) {
 }
 
 function handleTableRowDoubleClick(e) {
-    storage.removeItemByIndex(this.rowIndex)
-    storage.notifyDataChange()
-    renderData(storage, sendDataAndDecideLineNumberDisplay(document.querySelector('table')), handleTableRowDoubleClick)
+    const type = this.children[0].textContent
+    const invoiceNumber = this.children[1].textContent
+    if (type == 40 || type == 60) {
+        const index = storage.getItems().findIndex((cur) => cur[0] === type && cur[1] === invoiceNumber)
+        storage.removeItemByIndex(index)
+        storage.notifyDataChange()
+    }
+    renderData(manipulateData(storage), sendDataAndDecideLineNumberDisplay(document.querySelector('table')), handleTableRowDoubleClick)
 }
 
 

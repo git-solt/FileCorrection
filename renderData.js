@@ -14,7 +14,6 @@ export default function (dataHandler, htmlElement, eventHandler) {
 
         if (dataHandler.isErrorItem(row)) {
             rowNode.classList.add("erroritem")
-            console.log("fine")
         }
 
         table.appendChild(rowNode)
