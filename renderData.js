@@ -26,14 +26,17 @@ export default function (dataHandler, htmlElement, eventHandler) {
             tableDataNode.textContent =  isTotalSumColumn ?  parseFloat(tableItem).toFixed(2) : tableItem
 
             rowNode.appendChild(tableDataNode)
+            const isHeaderAndNeedsColumnFill = columnIndex === 5 && row[0] === "01"
             const isRecordType60AndNeedColumnFill = columnIndex === 6 && row[0] == 60
             const isLastRowAndNeedsColumnFill = isLastRow && columnIndex === row.length - 1
 
-            //Unoptimal Hack: Filling row to make it expand accross the entire table
+            //Unoptimal Hack: Filling row to make it expand accross the entire tabl e
+
+
             if(isRecordType60AndNeedColumnFill) {
                 tableDataNode.colSpan = "2"
             }
-            if (isLastRowAndNeedsColumnFill) {
+            if (isLastRowAndNeedsColumnFill || isHeaderAndNeedsColumnFill) {
                 const fillTd = document.createElement('td')
                 fillTd.colSpan = "2"
                 rowNode.appendChild(fillTd)
