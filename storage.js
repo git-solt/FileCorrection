@@ -2,6 +2,7 @@ const items = []
 let filteredItems = []
 let filtering = false
 const errorInstances = []
+let fileName;
 
 export default Object.freeze({
     getItems() {
@@ -98,9 +99,15 @@ export default Object.freeze({
     renderDone() {
         filtering = false
         filteredItems = []
+    },
+
+
+    getFileName() {
+        return fileName
+    },
+
+    setFileName(name) {
+        fileName = name;
     }
-
-
-
 
 })

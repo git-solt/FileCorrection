@@ -386,15 +386,14 @@ function mapDataForNewFile() {
 
     const url = createFile(firstRow, rowRecordType40, rowRecordType60, lastRow)
 
-    // const a = document.createElement('a')
-    // a.href = url
-    // a.download = "08collectdownload.txt"
-    // a.textContent = "Click for download"
-    // a.style.color = "white"
-    // document.body.appendChild(a)
-    // a.click()
+    const a = document.createElement('a')
+    a.href = url
+    a.download = storage.getFileName().replace(".txt", "KORR") + ".txt" || "08collectdownload.txt"
+    a.style.color = "white"
+    document.body.appendChild(a)
+    a.click()
 
-    window.open(url, '_blank')
+    // window.open(url, '_blank')
 
 }
 

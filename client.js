@@ -16,7 +16,7 @@ upload.addEventListener('input', handleUpload, { once: true })
 
 function handleUpload(e) {
     const file = e.target.files[0]
-
+    storage.setFileName(file.name)
     if (file) {
         const stream = file.stream()
         const reader = stream.getReader()
@@ -39,6 +39,7 @@ function handleUpload(e) {
         //Adding a new eventlistener for handeling log file
         function handleUploadErrorLog(e) {
             const file = e.target.files[0]
+            
             parseLogFileAndExtractData(file, (e) => {
                 if (e) {
                     content.textContent = "Error parsing data"
